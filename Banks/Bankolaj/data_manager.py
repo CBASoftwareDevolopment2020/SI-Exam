@@ -18,9 +18,45 @@ def create_connection(db_file: str) -> Connection:
 
 
 class DataManager:
+    def update_balance(self, acc_num: str, amt: int, other_acc_num: str, other_reg_num: str) -> bool:
+        cur = self._conn.cursor()
+        try:
+            cur.execute("SELECT * FROM accounts WHERE accNum = ?", (acc_num,))
+            acc_id, _, balance, owner = cur.fetchone()
+            cur.execute("UPDATE accounts SET balance = ? WHERE id = ?", (balance + amt, acc_id))
+            if cur.rowcount < 1:
+                return False
+            else:
+                return True
+        except Error as e:
+            print(e)
+
+    def validate_card(self, card_num: str, cvc: str) -> str:
+        cur = self._conn.cursor()
+        try:
+            cur.execute("SELECT accounts.accNum FROM cards WHERE cardNum = ? AND cvc = ?", (card_num, cvc))
+            res = cur.fetchone()
+            if res:
+                return True
+            return False
+        except Error as e:
+            print(e)
+
+    def validate_account(self, acc_num: str) -> bool:
+        cur = self._conn.cursor()
+        try:
+            cur.execute("SELECT * FROM accounts WHERE accNum = ?", (acc_num,))
+            res = cur.fetchone()
+            if res:
+                return True
+            return False
+        except Error as e:
+            print(e)
+
     def __init__(self, db_file: str):
         self._conn: Connection = None
         self.get_connection(db_file)
+        self.setup_tables()
 
     def get_connection(self, db_file: str) -> Connection:
         if self._conn is None:
@@ -42,7 +78,8 @@ class DataManager:
 
     def setup_tables(self):
         drop_tables = '''   DROP TABLE IF EXISTS cards;
-                            DROP TABLE IF EXISTS accounts;'''
+                            DROP TABLE IF EXISTS accounts;
+                            DROP TABLE IF EXISTS transfers'''
         account_table = ''' CREATE TABLE accounts(
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 accNum NCHAR(10) UNIQUE NOT NULL ,
@@ -56,14 +93,23 @@ class DataManager:
                             accId INTEGER NOT NULL,
                             FOREIGN KEY (accId) REFERENCES accounts (id)
                         )'''
+        transfer_table = '''CREATE TABLE transfers(
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                srcRegNum NCHAR(4) NOT NULL,
+                                srcAccNum NCHAR(10) NOT NULL,
+                                trgRegNum NCHAR(4) NOT NULL,
+                                trgAccNum NCHAR(10) NOT NULL,
+                                amount INTEGER NOT NULL
+                            )'''
         try:
             print('Creating tables')
-            self._conn.executescript(';\n'.join([drop_tables, account_table, card_table]))
+            self._conn.executescript(';\n'.join([drop_tables, account_table, card_table, transfer_table]))
             print('Tables created')
         except Error as e:
             print(e)
-
+        print('Populating tables')
         self.populate_tables()
+        print('Tables populated')
 
     def populate_tables(self):
         data = [('Michael Filipovic', '6331235806', '5019123400912666', '687', 0),
@@ -282,41 +328,6 @@ class DataManager:
         except Error as e:
             print(e)
         pp(cursor.fetchall())
-
-    def update_balance(self, acc_num: str, amt: int) -> bool:
-        cur = self._conn.cursor()
-        try:
-            cur.execute("SELECT * FROM accounts WHERE accNum = ?", (acc_num,))
-            acc_id, _, balance, owner = cur.fetchone()
-            cur.execute("UPDATE accounts SET balance = ? WHERE id = ?", (balance + amt, acc_id))
-            if cur.rowcount < 1:
-                return False
-            else:
-                return True
-        except Error as e:
-            print(e)
-
-    def validate_card(self, card_num: str, cvc: str) -> bool:
-        cur = self._conn.cursor()
-        try:
-            cur.execute("SELECT * FROM cards WHERE cardNum = ? AND cvc = ?", (card_num, cvc))
-            res = cur.fetchone()
-            if res:
-                return True
-            return False
-        except Error as e:
-            print(e)
-
-    def validate_account(self, acc_num: str) -> bool:
-        cur = self._conn.cursor()
-        try:
-            cur.execute("SELECT * FROM accounts WHERE accNum = ?", (acc_num,))
-            res = cur.fetchone()
-            if res:
-                return True
-            return False
-        except Error as e:
-            print(e)
 
 
 if __name__ == '__main__':
