@@ -2,10 +2,9 @@ import pika
 import json
 import ast
 from bank import Bankolaj
-
+from secrets import url
 
 def main():
-    url = "amqps://epryvnth:U21Lp1tn8pQfKtxzBS3CYmh61CJ1_jje@hawk.rmq.cloudamqp.com/epryvnth"
     params = pika.URLParameters(url)
     connection = pika.BlockingConnection(params)
     channel = connection.channel()

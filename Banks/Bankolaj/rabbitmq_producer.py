@@ -1,29 +1,28 @@
 import pika
 import json
+from secrets import url
 
 if __name__ == '__main__':
-    url = "amqps://epryvnth:U21Lp1tn8pQfKtxzBS3CYmh61CJ1_jje@hawk.rmq.cloudamqp.com/epryvnth"
     params = pika.URLParameters(url)
     connection = pika.BlockingConnection(params)
 
     channel = connection.channel()  # start a channel
 
-    # TRANSFER
-    trn = {
+    transfer_json = {
         "amount": 420,
         "orginCardNumber": "1234567890",
         "originCVC": "123",
-        "targetAccountNumber": "111122223333"
+        "targetAccountNumber": "111122223333",
+        "targetRegNumber": "4651"
     }
 
-    # UPDATE
-    upd = {
+    update_json = {
         "accountNumber": "111122223333",
         "amount": 420,
         "sourceAccountNumber": "1234567890",
         "sourceRegNumber": "0000",
     }
 
-    channel.basic_publish(exchange='', routing_key='1234-transfer', body=json.dumps(trn))
-    channel.basic_publish(exchange='', routing_key='1234-update', body=json.dumps(upd))
+    channel.basic_publish(exchange='', routing_key='1234-transfer', body=json.dumps(transfer_json))
+    channel.basic_publish(exchange='', routing_key='1234-update', body=json.dumps(update_json))
     connection.close()
