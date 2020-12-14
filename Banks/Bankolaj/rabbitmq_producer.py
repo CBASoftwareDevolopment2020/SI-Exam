@@ -1,8 +1,9 @@
 import pika
 import json
-from secrets import url
+from secrets import cloudamqp_host, cloudamqp_user, cloudamqp_password
 
 if __name__ == '__main__':
+    url = f'amqps://{cloudamqp_user}:{cloudamqp_password}@{cloudamqp_host}/{cloudamqp_user}'
     params = pika.URLParameters(url)
     connection = pika.BlockingConnection(params)
 

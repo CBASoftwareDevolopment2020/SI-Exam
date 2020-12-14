@@ -2,9 +2,11 @@ import pika
 import json
 import ast
 from bank import Bankolaj
-from secrets import url
+from secrets import cloudamqp_host, cloudamqp_user, cloudamqp_password
+
 
 def main():
+    url = f'amqps://{cloudamqp_user}:{cloudamqp_password}@{cloudamqp_host}/{cloudamqp_user}'
     params = pika.URLParameters(url)
     connection = pika.BlockingConnection(params)
     channel = connection.channel()
