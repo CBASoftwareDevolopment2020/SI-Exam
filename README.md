@@ -5,6 +5,6 @@
 
 ## Setup
 
-Bankolaj contains a secret.py file with a list of names  
+Bankolaj contains a secret.py file with a list of names and the url to the rabbitmq service  
 For CurrencyConverter to work create secrets.py file with X-RapidAPI-Key variable called `rapidapi_key`  
 Currency API: https://rapidapi.com/apiworker.com/api/currency-converter13
