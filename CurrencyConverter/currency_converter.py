@@ -5,7 +5,7 @@ from math import floor
 
 class CurrencyConverter:
     @staticmethod
-    def Convert(in_cur: str, out_cur: str, amt: int) -> int:
+    def convert(in_cur: str, out_cur: str, amt: int) -> int:
         return int(floor(CurrencyConverter.exchange_rate(in_cur, out_cur) * amt))
 
     @staticmethod
@@ -22,4 +22,4 @@ class CurrencyConverter:
 
 
 if __name__ == '__main__':
-    print(CurrencyConverter.Convert('USD', 'EUR', 100))
+    print(CurrencyConverter.convert('USD', 'EUR', 100))
