@@ -3,8 +3,9 @@ const AppDAO = require('./dao');
 const accountsRepo = require('./accounts');
 const dao = new AppDAO('./db/bonk');
 const accounts = new accountsRepo(dao);
+var secret = require('./secret');
 
-url = 'amqps://epryvnth:U21Lp1tn8pQfKtxzBS3CYmh61CJ1_jje@hawk.rmq.cloudamqp.com/epryvnth';
+url = secret;
 
 amqp.connect(url, function (error0, connection) {
 	if (error0) {

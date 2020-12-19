@@ -1,6 +1,7 @@
 var amqp = require('amqplib/callback_api');
+var secret = require('./secret');
 
-url = 'amqps://epryvnth:U21Lp1tn8pQfKtxzBS3CYmh61CJ1_jje@hawk.rmq.cloudamqp.com/epryvnth';
+url = secret;
 // params = pika.URLParameters(url);
 // connection = pika.BlockingConnection(params);
 
