@@ -2,7 +2,7 @@ from currency_converter import CurrencyConverter
 
 from spyne.application import Application
 from spyne.decorator import srpc
-from spyne.model import String, Integer, Float, SelfReference
+from spyne.model import String, Integer, Float
 from spyne.protocol.soap import Soap11
 from spyne.service import ServiceBase
 from spyne.server.wsgi import WsgiApplication
@@ -15,6 +15,10 @@ class SOAPService(ServiceBase):
     @srpc(String, String, Integer, _returns=Integer)
     def convert_currency(in_cur: str, out_cur: str, amt: int) -> int:
         return SOAPService.converter.convert(in_cur, out_cur, amt)
+
+    @srpc(String, String, Integer, _returns=Integer)
+    def convert_currency_old(in_cur: str, out_cur: str, amt: int) -> int:
+        return SOAPService.converter.convert_old(in_cur, out_cur, amt)
 
     @srpc(String, String, _returns=Float)
     def exchange_rate(in_cur: str, out_cur: str) -> float:

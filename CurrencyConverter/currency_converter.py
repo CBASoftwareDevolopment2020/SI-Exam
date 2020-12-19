@@ -1,12 +1,17 @@
+import webscraper
+
 import requests
 import secrets
-from math import floor
 
 
 class CurrencyConverter:
     @staticmethod
     def convert(in_cur: str, out_cur: str, amt: int) -> int:
-        return int(floor(CurrencyConverter.exchange_rate(in_cur, out_cur) * amt))
+        return int(round(webscraper.get_exchange_rate(in_cur, out_cur) * amt))
+
+    @staticmethod
+    def convert_old(in_cur: str, out_cur: str, amt: int) -> int:
+        return int(round(CurrencyConverter.exchange_rate(in_cur, out_cur) * amt))
 
     @staticmethod
     def exchange_rate(in_cur: str, out_cur: str) -> float:
