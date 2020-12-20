@@ -24,7 +24,7 @@ def main():
 
                 upd = {
                     "accountNumber": trg_acc_num,
-                    "amount": amt,
+                    "amount": -amt,
                     "sourceAccountNumber": acc_num,
                     "sourceRegNumber": bank.bank_num
                 }
