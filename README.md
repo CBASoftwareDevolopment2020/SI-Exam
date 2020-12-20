@@ -1,6 +1,6 @@
 # SI-Exam
 
-![Architecture Diagram](architecture.png)
+![Architecture Diagram](architecture.png)  
 ![BPMN](bpmn.png)
 
 We have created a webshop that is taking advantage of many different microservices we have created for this project using both Python, Javascript and Java.
